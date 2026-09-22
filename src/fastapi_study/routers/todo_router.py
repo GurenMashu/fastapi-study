@@ -50,10 +50,14 @@ def fetch_todo(id: str) -> ToDoCreateOut | BaseOut:
                         status_code=400)
     for todo in db:
         if todo.id == id:
-            return Response(content=ToDoCreateOut(
-                todo=todo, msg="ToDo Found.").model_dump_json(),
-                            status_code=200)
-    return BaseOut(msg="ToDo Not Found.")
+            return Response(
+                content=ToDoCreateOut(
+                    todo=todo,
+                    msg="ToDo Found.").model_dump_json(),
+                status_code=200)
+    return Response(
+        content=BaseOut(msg="ToDo Not Found."),
+        status_code=404)
 
 
 @todo_router.put("/todo/{id}", response_model=ToDoCreateOut | BaseModel)
