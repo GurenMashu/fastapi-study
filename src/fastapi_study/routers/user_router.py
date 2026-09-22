@@ -1,9 +1,4 @@
-from fastapi import FastAPI, APIRouter
-
-app = FastAPI(
-    title="ToDo app",
-    version="0.0.1"
-)
+from fastapi import APIRouter
 
 user_router = APIRouter(prefix="/user", tags=["User"])
 
