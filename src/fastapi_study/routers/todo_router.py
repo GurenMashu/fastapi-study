@@ -1,11 +1,7 @@
 from uuid import UUID, uuid4
-from fastapi import FastAPI, APIRouter
+from fastapi import APIRouter, Response
 from pydantic import BaseModel, Field
 
-app = FastAPI(
-    title="ToDo app",
-    version="0.0.1"
-)
 
 todo_router = APIRouter(prefix="/todo", tags=["ToDo"])
 
@@ -49,10 +45,14 @@ def fetch_todo(id: str) -> ToDoCreateOut | BaseOut:
     try:
         id = UUID(id)
     except Exception as e:
-        return BaseOut(msg="Wrong ID", error=str(e))
+        return Response(content=BaseOut(
+                            msg="Wrong ID", error=str(e)).model_dump_json(),
+                        status_code=400)
     for todo in db:
         if todo.id == id:
-            return ToDoCreateOut(todo=todo, msg="ToDo Found.")
+            return Response(content=ToDoCreateOut(
+                todo=todo, msg="ToDo Found.").model_dump_json(),
+                            status_code=200)
     return BaseOut(msg="ToDo Not Found.")
 
 
